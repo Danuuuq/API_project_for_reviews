@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import timedelta
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,7 +12,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Application definition
 
 INSTALLED_APPS = [
@@ -21,6 +22,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
+    'users',
+    'rest_framework',
+    'reviews',
+    'api',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -85,7 +92,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'UTC'
 
@@ -101,3 +108,52 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
+
+# User authentication and variables
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+AUTH_USER_MODEL = 'users.User'
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+
+EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+
+EMAIL_FROM = 'info@yamdb.com'
+
+ROLE_USERS = (
+    ('user', 'пользователь'),
+    ('moderator', 'модератор'),
+    ('admin', 'администратор')
+)
+
+USER_SELF_IDENTIFIER = 'me'
+
+MIN_RATING = 1
+
+MAX_RATING = 10
+
+MAX_LENGTH_ROLE = 10
+
+MAX_LENGTH_USERNAME = 150
+
+MAX_LENGTH_EMAIL = 254
+
+MAX_LENGTH_CONFIRMATION_CODE = 16
+
+MAX_LENGHT_NAME = 256
+
+MAX_LENGHT_SLUG = 50
+
+PAGE_SIZE_PAGINATION = 10
